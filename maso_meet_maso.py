@@ -6,21 +6,21 @@ from core.vars import BASE_DIR
 from core.api import MPServerAPI
 
 SUITORS = [
+	'Leopold',
+	'Job',
+	'M',
 	'Andre',
+	'Sebastian',
 	'Edward',
+	'Lou',
+	'Stephen',
 	'JeanJacques',
 	'Jesus',
-	'Job',
-	'Leopold',
-	'Lou',
-	'M',
 	'Pierre',
-	'Ryan',
-	'Sebastian',
-	'Sol',
-	'Stephen',
 	'TE',
-	'Timur'
+	'Sol',
+	'Ryan',
+	'Timur'	
 ]
 
 class MasoMeetMaso(MPServerAPI):
@@ -29,16 +29,19 @@ class MasoMeetMaso(MPServerAPI):
 		logging.basicConfig(filename=self.conf['d_files']['module']['log'], level=logging.DEBUG)
 
 	def hear_main_menu(self):
-		choice = self.prompt(os.path.join("prompts", "1_MasoMenu.wav"), release_keys=range(len(SUITORS)))
-		return self.play_suitor_menu(choice)
+		choice = self.prompt(os.path.join("prompts", "1_MasoMenu.wav"), release_keys=range(len(SUITORS) + 1))
+		return self.play_suitor_menu(SUITORS[choice])
 
 	def play_suitor_menu(self, suitor):
-		choice = self.prompt(os.path.join("prompts", "Menu-%s.wav" % suitor))
+		choice = self.prompt(os.path.join("prompts", "Menu-%s.wav" % suitor), release_keys=[0,1])
 		
-		if choice == 1:
+		if choice == 0:
 			return self.say(os.path.join("prompts", "End-%s.wav" % suitor))
 
 		return self.hear_main_menu()
+
+	def map_key_to_tone(self, key):
+		return 2
 
 	def run_script(self):
 		super(MasoMeetMaso, self).run_script()
